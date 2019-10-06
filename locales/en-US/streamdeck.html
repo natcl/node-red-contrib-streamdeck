@@ -1,0 +1,64 @@
+<script type="text/x-red" data-help-name="streamdeck-in">
+  <p>A node that will output the state of the Stream Deck keys.</p>
+  <h3>Outputs</h3>
+  <dl class="message-properties">
+    <dt>payload<span class="property-type">integer</span></dt>
+    <dd>Will be <code>1</code> when the key is down, <code>0</code> when the key is up.</dd>
+    <dt>topic <span class="property-type">integer</span></dt>
+    <dd>The index of the key being pressed, starts at <code>0</code></dd>
+  </dl>
+</script>
+
+<script type="text/x-red" data-help-name="streamdeck-out">
+  <p>A node to send commands to a Stream Deck.</p>
+  <h3>Inputs</h3>
+  <dl class="message-properties">
+    <dt>payload<span class="property-type">object</span></dt>
+    <dd>This should be an object containing a <code>command</code> property. 
+    Some commands require additional properties, described in the commands section below.</dd>
+    <dt class="optional">topic <span class="property-type">integer</span></dt>
+    <dd>The index of the key to send the command to, starts at <code>0</code></dd>
+  </dl>
+
+  <h3>Commands</h3>
+  <dl class="message-properties">
+    <dt>fillColor<span class="property-type">array</span></dt>
+    <dd>Should have a <code>value</code> property containing an array of color values in RGB order, between <code>0</code> and <code>255</code>. 
+    keyIndex should be passed as the <code>topic</code>.</dd>
+    
+    <dt>fillImage<span class="property-type">path | url | buffer</span></dt>
+    <dd>Should have an <code>image</code> property containing either a file path, url or buffer containing image data. 
+    keyIndex should be passed as the <code>topic</code>.</dd>
+    
+    <dt>fillPanel<span class="property-type">path | url | buffer</span></dt>
+    <dd>Same as <code>fillImage</code> but will fill the entire panel.</dd>
+    
+    <dt>clearKey</dt>
+    <dd>Will clear a key with keyIndex passed as <code>topic</code>.</dd>
+    
+    <dt>clearAllKeys</dt>
+    <dd>Will clear the whole panel.</dd>
+    
+    <dt>resetToLogo</dt>
+    <dd>Will show the default Stream Deck logo.</dd>
+
+    <dt>setBrightness<span class="property-type">integer</span></dt>
+    <dd>Should have a <code>value</code> property containing an integer between <code>0</code> and <code>100</code>.</dd>
+
+    <dt>listStreamDecks</dt>
+    <dd>Will list the available Stream Decks.</dd>
+  </dl>
+
+  <h3>Example</h3>
+  <dl>
+<pre>
+{
+  "topic": 3
+  "payload" : {
+    "command": "fillImage",
+    "image": "./node-red.png"
+  }
+}
+</pre>
+  </dl>
+</script>

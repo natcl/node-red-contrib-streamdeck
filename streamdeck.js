@@ -43,9 +43,17 @@ module.exports = function (RED) {
         if (msg.payload.command) {
           switch (msg.payload.command) {
             case 'fillColor':
-              myStreamDeck.fillColor(keyIndex, ...msg.payload.data)
+              if (!Number.isInteger(keyIndex)) {
+                node.error('keyIndex missing in topic', msg)
+                return
+              }
+              myStreamDeck.fillColor(keyIndex, ...msg.payload.value)
               break
             case 'fillImage':
+              if (!Number.isInteger(keyIndex)) {
+                node.error('keyIndex missing in topic', msg)
+                return
+              }
               Jimp.read(msg.payload.image, (err, image) => {
                 if (err) {
                   node.error(err, msg)
@@ -77,6 +85,10 @@ module.exports = function (RED) {
               myStreamDeck.clearAllKeys()
               break
             case 'clearKey':
+              if (!Number.isInteger(keyIndex)) {
+                node.error('keyIndex missing in topic')
+                return
+              }
               myStreamDeck.clearKey(keyIndex)
               break
             case 'resetToLogo':
