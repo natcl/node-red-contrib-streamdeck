@@ -105,7 +105,6 @@ module.exports = function (RED) {
       }
     })
     node.on('close', function () {
-      myStreamDeck.resetToLogo()
       myStreamDeck.close()
       myStreamDeck = null
     })
