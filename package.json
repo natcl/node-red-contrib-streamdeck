@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/natcl/node-red-contrib-streamdeck#readme",
   "dependencies": {
-    "elgato-stream-deck": "3.0.0",
+    "elgato-stream-deck": "3.1.0",
     "jimp": "0.8.4"
   },
   "devDependencies": {

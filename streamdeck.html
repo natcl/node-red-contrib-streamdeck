@@ -1,13 +1,13 @@
 <script type="text/javascript">
   RED.nodes.registerType('streamdeck-in',{
       category: 'function',
-      color: '#a6bbcf',
+      color: '#3FADB5',
       defaults: {
           name: {value:""}
       },
       inputs:0,
       outputs:1,
-      icon: "file.png",
+      icon: "elgato.png",
       label: function() {
           return this.name||"stream deck in";
       }
@@ -28,13 +28,13 @@
 <script type="text/javascript">
   RED.nodes.registerType('streamdeck-out',{
       category: 'function',
-      color: '#a6bbcf',
+      color: '#3FADB5',
       defaults: {
           name: {value:""}
       },
       inputs:1,
       outputs:0,
-      icon: "file.png",
+      icon: "elgato.png",
       label: function() {
           return this.name||"stream deck out";
       }

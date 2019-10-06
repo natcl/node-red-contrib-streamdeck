@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "node-red": "0.20.8",
+    "node-red": "1.0.1",
     "node-red-contrib-streamdeck": ".."
   },
   "scripts": {
