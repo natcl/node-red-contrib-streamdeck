@@ -47,7 +47,11 @@ module.exports = function (RED) {
                 node.error('keyIndex missing in topic', msg)
                 return
               }
-              myStreamDeck.fillColor(keyIndex, ...msg.payload.value)
+              try {
+                myStreamDeck.fillColor(keyIndex, ...msg.payload.value)
+              } catch (error) {
+                node.error('Can\'t write to StreamDeck', msg)
+              }
               break
             case 'fillImage':
               if (!Number.isInteger(keyIndex)) {
@@ -64,7 +68,11 @@ module.exports = function (RED) {
                 for (let p = 0; p < image.length / 4; p++) {
                   image.copy(finalBuffer, p * 3, p * 4, p * 4 + 3)
                 }
-                myStreamDeck.fillImage(keyIndex, finalBuffer)
+                try {
+                  myStreamDeck.fillImage(keyIndex, finalBuffer)
+                } catch (error) {
+                  node.error('Can\'t write to StreamDeck', msg)
+                }
               })
               break
             case 'fillPanel':
@@ -78,30 +86,56 @@ module.exports = function (RED) {
                 for (let p = 0; p < image.length / 4; p++) {
                   image.copy(finalBuffer, p * 3, p * 4, p * 4 + 3)
                 }
-                myStreamDeck.fillPanel(finalBuffer)
+                try {
+                  myStreamDeck.fillPanel(finalBuffer)
+                } catch (error) {
+                  node.error('Can\'t write to StreamDeck', msg)
+                }
               })
               break
             case 'clearAllKeys':
-              myStreamDeck.clearAllKeys()
+              try {
+                myStreamDeck.clearAllKeys()
+              } catch (error) {
+                node.error('Can\'t write to StreamDeck', msg)
+              }
               break
             case 'clearKey':
               if (!Number.isInteger(keyIndex)) {
                 node.error('keyIndex missing in topic')
                 return
               }
-              myStreamDeck.clearKey(keyIndex)
+              try {
+                myStreamDeck.clearKey(keyIndex)
+              } catch (error) {
+                node.error('Can\'t write to StreamDeck', msg)
+              }
               break
             case 'resetToLogo':
-              myStreamDeck.resetToLogo()
+              try {
+                myStreamDeck.resetToLogo()
+              } catch (error) {
+                node.error('Can\'t write to StreamDeck', msg)
+              }
               break
             case 'setBrightness':
-              myStreamDeck.setBrightness(msg.payload.value)
+              try {
+                myStreamDeck.setBrightness(msg.payload.value)
+              } catch (error) {
+                node.error('Can\'t write to StreamDeck', msg)
+              }
               break
             case 'listStreamDecks':
-              node.warn(listStreamDecks())
+              try {
+                node.warn(listStreamDecks())
+              } catch (error) {
+                node.error('Can\'t write to StreamDeck', msg)
+              }
               break
           }
         }
+      } else {
+        node.error('Stream Deck connection issue', msg)
       }
     })
     node.on('close', function () {
