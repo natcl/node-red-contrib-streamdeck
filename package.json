@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-streamdeck",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A Node-RED node to interact with the Elgato Stream Deck products",
   "scripts": {
     "test": "mocha \"test/**/*_spec.js\"",
@@ -31,8 +31,7 @@
   },
   "node-red": {
     "nodes": {
-      "streamdeck-in": "streamdeck.js",
-      "streamdeck-out": "streamdeck.js"
+      "streamdeck": "streamdeck.js"
     }
   }
 }
