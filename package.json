@@ -11,21 +11,24 @@
     "url": "git+https://github.com/natcl/node-red-contrib-streamdeck.git"
   },
   "keywords": [
-    "node-red"
+    "node-red", "elgato", "streamdeck"
   ],
   "author": "Nathanaël Lécaudé",
-  "license": "ISC",
+  "license": "Apache",
   "bugs": {
     "url": "https://github.com/natcl/node-red-contrib-streamdeck/issues"
   },
   "homepage": "https://github.com/natcl/node-red-contrib-streamdeck#readme",
   "dependencies": {
-    "elgato-stream-deck": "3.1.0",
-    "jimp": "0.8.4"
+    "elgato-stream-deck": "3.3.0",
+    "jimp": "0.12.1"
+  },
+  "optionalDependencies": {
+    "@julusian/jpeg-turbo": "^0.5.3"
   },
   "devDependencies": {
     "mocha": "6.2.0",
-    "node-red": "0.20.8",
+    "node-red": "1.0.6",
     "node-red-node-test-helper": "0.2.3",
     "standard": "*"
   },
