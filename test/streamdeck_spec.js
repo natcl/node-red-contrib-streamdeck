@@ -17,6 +17,7 @@ describe('streamdeck Node', function () {
       done()
     })
   })
+
   it('should be loaded', function (done) {
     var flow = [{ id: 'n1', type: 'streamdeck-out', name: 'streamdeck-out' }]
     helper.load(streamdeck, flow, function () {
