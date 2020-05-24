@@ -63,5 +63,4 @@ typings/
 # Node-RED
 .config.json*
 *_cred.json
-package-lock.json
 *.json.backup

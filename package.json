@@ -1,17 +1,18 @@
 {
   "name": "node-red-contrib-streamdeck",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "A Node-RED node to interact with the Elgato Stream Deck products",
   "scripts": {
-    "test": "mocha \"test/**/*_spec.js\"",
-    "start": "node node_modules/node-red/red.js -v -u . flows.json"
+    "test": "mocha \"test/**/*_spec.js\""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/natcl/node-red-contrib-streamdeck.git"
   },
   "keywords": [
-    "node-red", "elgato", "streamdeck"
+    "node-red",
+    "elgato",
+    "streamdeck"
   ],
   "author": "Nathanaël Lécaudé",
   "license": "Apache",
