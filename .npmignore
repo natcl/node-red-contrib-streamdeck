@@ -1,1 +1,4 @@
 project
+.config*
+*.json.backup
+.DS_Store
