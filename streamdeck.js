@@ -1,12 +1,12 @@
-const { openStreamDeck, listStreamDecks } = require('elgato-stream-deck')
+const { openStreamDeck, listStreamDecks } = require('@elgato-stream-deck/node')
 const Jimp = require('jimp')
 
 let myStreamDeck = null
 
-function streamDeckInit () {
+async function streamDeckInit () {
   if (myStreamDeck === null) {
     try {
-      myStreamDeck = openStreamDeck()
+      myStreamDeck = await openStreamDeck()
     } catch (error) {
       console.error('Error opening Stream Deck device', error)
     }
@@ -37,7 +37,7 @@ module.exports = function (RED) {
     RED.nodes.createNode(this, config)
     var node = this
     streamDeckInit()
-    node.on('input', function (msg) {
+    node.on('input', async function (msg) {
       if (myStreamDeck) {
         const keyIndex = parseInt(msg.topic)
         if (msg.payload.command) {
@@ -48,7 +48,7 @@ module.exports = function (RED) {
                 return
               }
               try {
-                myStreamDeck.fillColor(keyIndex, ...msg.payload.value)
+                await myStreamDeck.fillColor(keyIndex, ...msg.payload.value)
               } catch (error) {
                 node.error('Can\'t write to StreamDeck', msg)
               }
@@ -58,7 +58,7 @@ module.exports = function (RED) {
                 node.error('keyIndex missing in topic', msg)
                 return
               }
-              Jimp.read(msg.payload.image, (err, image) => {
+              Jimp.read(msg.payload.image, async (err, image) => {
                 if (err) {
                   node.error(err, msg)
                   return
@@ -69,14 +69,14 @@ module.exports = function (RED) {
                   image.copy(finalBuffer, p * 3, p * 4, p * 4 + 3)
                 }
                 try {
-                  myStreamDeck.fillImage(keyIndex, finalBuffer)
+                  await myStreamDeck.fillImage(keyIndex, finalBuffer)
                 } catch (error) {
                   node.error('Can\'t write to StreamDeck', msg)
                 }
               })
               break
             case 'fillPanel':
-              Jimp.read(msg.payload.image, (err, image) => {
+              Jimp.read(msg.payload.image, async (err, image) => {
                 if (err) {
                   node.error(err, msg)
                   return
@@ -87,7 +87,7 @@ module.exports = function (RED) {
                   image.copy(finalBuffer, p * 3, p * 4, p * 4 + 3)
                 }
                 try {
-                  myStreamDeck.fillPanel(finalBuffer)
+                  await myStreamDeck.fillPanel(finalBuffer)
                 } catch (error) {
                   node.error('Can\'t write to StreamDeck', msg)
                 }
@@ -95,7 +95,7 @@ module.exports = function (RED) {
               break
             case 'clearAllKeys':
               try {
-                myStreamDeck.clearAllKeys()
+                await myStreamDeck.clearAllKeys()
               } catch (error) {
                 node.error('Can\'t write to StreamDeck', msg)
               }
@@ -106,28 +106,28 @@ module.exports = function (RED) {
                 return
               }
               try {
-                myStreamDeck.clearKey(keyIndex)
+                await myStreamDeck.clearKey(keyIndex)
               } catch (error) {
                 node.error('Can\'t write to StreamDeck', msg)
               }
               break
             case 'resetToLogo':
               try {
-                myStreamDeck.resetToLogo()
+                await myStreamDeck.resetToLogo()
               } catch (error) {
                 node.error('Can\'t write to StreamDeck', msg)
               }
               break
             case 'setBrightness':
               try {
-                myStreamDeck.setBrightness(msg.payload.value)
+                await myStreamDeck.setBrightness(msg.payload.value)
               } catch (error) {
                 node.error('Can\'t write to StreamDeck', msg)
               }
               break
             case 'listStreamDecks':
               try {
-                node.warn(listStreamDecks())
+                node.warn(await listStreamDecks())
               } catch (error) {
                 node.error('Can\'t write to StreamDeck', msg)
               }
@@ -138,8 +138,8 @@ module.exports = function (RED) {
         node.error('Stream Deck connection issue', msg)
       }
     })
-    node.on('close', function () {
-      myStreamDeck.close()
+    node.on('close', async function () {
+      await myStreamDeck.close()
       myStreamDeck = null
     })
   }

@@ -22,11 +22,11 @@
   },
   "homepage": "https://github.com/natcl/node-red-contrib-streamdeck#readme",
   "dependencies": {
-    "elgato-stream-deck": "4.1.0",
+    "@elgato-stream-deck/node": "5.1.2",
     "jimp": "0.16.1"
   },
   "optionalDependencies": {
-    "@julusian/jpeg-turbo": "1.0.1"
+    "@julusian/jpeg-turbo": "1.1.1"
   },
   "devDependencies": {
     "mocha": "8.2.1",
