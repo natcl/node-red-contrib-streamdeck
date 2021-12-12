@@ -64,3 +64,4 @@ typings/
 .config*.json*
 *_cred.json
 *.json.backup
+settings.js

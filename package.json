@@ -3,6 +3,7 @@
   "version": "1.0.2",
   "description": "A Node-RED node to interact with the Elgato Stream Deck products",
   "scripts": {
+    "start": "npm link node-red-contrib-streamdeck && node-red -v -u . examples/streamdeck.json",
     "test": "mocha \"test/**/*_spec.js\""
   },
   "repository": {
@@ -21,7 +22,7 @@
   },
   "homepage": "https://github.com/natcl/node-red-contrib-streamdeck#readme",
   "dependencies": {
-    "elgato-stream-deck": "4.0.1",
+    "elgato-stream-deck": "4.1.0",
     "jimp": "0.16.1"
   },
   "optionalDependencies": {
