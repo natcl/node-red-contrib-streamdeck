@@ -1,5 +1,6 @@
 const { openStreamDeck, listStreamDecks } = require('elgato-stream-deck')
 const Jimp = require('jimp')
+const { GifUtil } = require('gifwrap')
 
 let myStreamDeck = null
 
@@ -73,6 +74,27 @@ module.exports = function (RED) {
                 } catch (error) {
                   node.error('Can\'t write to StreamDeck', msg)
                 }
+              })
+              break
+            case 'fillImageGif':
+              if (!Number.isInteger(keyIndex)) {
+                node.error('keyIndex missing in topic', msg)
+                return
+              }
+              GifUtil.read(msg.payload.image).then(inputGif => {
+                inputGif.frames.forEach(frame => {
+                  node.warn(JSON.stringify(frame, null, 2))
+                  frame = frame.resize(myStreamDeck.ICON_SIZE, myStreamDeck.ICON_SIZE).frame.bitmap.data
+                  const finalBuffer = Buffer.alloc(myStreamDeck.ICON_SIZE ** 2 * 3)
+                  for (let p = 0; p < image.length / 4; p++) {
+                    image.copy(finalBuffer, p * 3, p * 4, p * 4 + 3)
+                  }
+                  try {
+                    myStreamDeck.fillImage(keyIndex, finalBuffer)
+                  } catch (error) {
+                    node.error('Can\'t write to StreamDeck', msg)
+                  }
+                })
               })
               break
             case 'fillPanel':
