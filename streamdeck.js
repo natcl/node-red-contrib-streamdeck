@@ -4,25 +4,31 @@ const Jimp = require('jimp')
 let myStreamDeck = null
 
 async function streamDeckInit () {
-  if (myStreamDeck === null) {
-    try {
-      myStreamDeck = await openStreamDeck()
-    } catch (error) {
-      console.error('Error opening Stream Deck device', error)
-    }
-    if (myStreamDeck) {
-      myStreamDeck.on('error', error => {
-        console.error(error)
-      })
-    }
+  let streamDeck = null
+  try {
+    console.log('hllo')
+    streamDeck = await openStreamDeck()
+    streamDeck.on('error', error => {
+      console.error(error)
+    })
+    return streamDeck
+  } catch (error) {
+    console.error('Error opening Stream Deck device', error)
   }
 }
+
+streamDeckInit().then(sd => {
+  myStreamDeck = sd
+}).catch(error => {
+  console.error(error)
+})
+
 
 module.exports = function (RED) {
   function StreamDeckIn (config) {
     RED.nodes.createNode(this, config)
     var node = this
-    streamDeckInit()
+    //if (!myStreamDeck) myStreamDeck = await streamDeckInit()
     if (myStreamDeck) {
       myStreamDeck.on('up', keyIndex => {
         node.send({ topic: keyIndex, payload: 0 })
@@ -36,8 +42,8 @@ module.exports = function (RED) {
   function StreamDeckOut (config) {
     RED.nodes.createNode(this, config)
     var node = this
-    streamDeckInit()
     node.on('input', async function (msg) {
+      //if (!myStreamDeck) myStreamDeck = await streamDeckInit()
       if (myStreamDeck) {
         const keyIndex = parseInt(msg.topic)
         if (msg.payload.command) {
@@ -48,7 +54,7 @@ module.exports = function (RED) {
                 return
               }
               try {
-                await myStreamDeck.fillColor(keyIndex, ...msg.payload.value)
+                await myStreamDeck.fillKeyColor(keyIndex, ...msg.payload.value)
               } catch (error) {
                 node.error('Can\'t write to StreamDeck', msg)
               }
@@ -69,8 +75,9 @@ module.exports = function (RED) {
                   image.copy(finalBuffer, p * 3, p * 4, p * 4 + 3)
                 }
                 try {
-                  await myStreamDeck.fillImage(keyIndex, finalBuffer)
+                  await myStreamDeck.fillKeyBuffer(keyIndex, finalBuffer)
                 } catch (error) {
+                  console.error(error)
                   node.error('Can\'t write to StreamDeck', msg)
                 }
               })
@@ -87,15 +94,16 @@ module.exports = function (RED) {
                   image.copy(finalBuffer, p * 3, p * 4, p * 4 + 3)
                 }
                 try {
-                  await myStreamDeck.fillPanel(finalBuffer)
+                  await myStreamDeck.fillPanelBuffer(finalBuffer)
                 } catch (error) {
+                  console.error(error)
                   node.error('Can\'t write to StreamDeck', msg)
                 }
               })
               break
             case 'clearAllKeys':
               try {
-                await myStreamDeck.clearAllKeys()
+                await myStreamDeck.clearPanel()
               } catch (error) {
                 node.error('Can\'t write to StreamDeck', msg)
               }
