@@ -4,46 +4,45 @@ const Jimp = require('jimp')
 let myStreamDeck = null
 
 async function streamDeckInit () {
-  let streamDeck = null
-  try {
-    console.log('hllo')
-    streamDeck = await openStreamDeck()
-    streamDeck.on('error', error => {
-      console.error(error)
-    })
-    return streamDeck
-  } catch (error) {
-    console.error('Error opening Stream Deck device', error)
+  if (!myStreamDeck) {
+    try {
+      console.log('Initialiazing Stream Deck...')
+      const streamDeck = await openStreamDeck()
+      streamDeck.on('error', error => {
+        console.error(error)
+      })
+      myStreamDeck = streamDeck
+    } catch (error) {
+      console.error('Error opening Stream Deck device', error)
+    }
   }
 }
-
-streamDeckInit().then(sd => {
-  myStreamDeck = sd
-}).catch(error => {
-  console.error(error)
-})
-
 
 module.exports = function (RED) {
   function StreamDeckIn (config) {
     RED.nodes.createNode(this, config)
-    var node = this
-    //if (!myStreamDeck) myStreamDeck = await streamDeckInit()
-    if (myStreamDeck) {
-      myStreamDeck.on('up', keyIndex => {
-        node.send({ topic: keyIndex, payload: 0 })
-      })
-      myStreamDeck.on('down', keyIndex => {
-        node.send({ topic: keyIndex, payload: 1 })
+    const node = this
+    if (!myStreamDeck) {
+      streamDeckInit().then(sd => {
+        if (myStreamDeck) {
+          myStreamDeck.on('up', keyIndex => {
+            node.send({ topic: keyIndex, payload: 0 })
+          })
+          myStreamDeck.on('down', keyIndex => {
+            node.send({ topic: keyIndex, payload: 1 })
+          })
+        }
+      }).catch(error => {
+        console.error(error)
       })
     }
   }
 
   function StreamDeckOut (config) {
     RED.nodes.createNode(this, config)
-    var node = this
+    const node = this
     node.on('input', async function (msg) {
-      //if (!myStreamDeck) myStreamDeck = await streamDeckInit()
+      if (!myStreamDeck) await streamDeckInit()
       if (myStreamDeck) {
         const keyIndex = parseInt(msg.topic)
         if (msg.payload.command) {
