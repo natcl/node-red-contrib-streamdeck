@@ -2,6 +2,8 @@
 
 A Node-RED node to interact with the Elgato Stream Deck products.
 
+Note: this node connects directly to the Stream Deck, it cannot be used in conjunction with Elgato's Stream Deck software which will need to be closed for this node to work.
+
 # Installation
 
 ## Local
