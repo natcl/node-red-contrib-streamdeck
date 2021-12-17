@@ -23,7 +23,7 @@ module.exports = function (RED) {
     RED.nodes.createNode(this, config)
     const node = this
     if (!myStreamDeck) {
-      streamDeckInit().then(sd => {
+      streamDeckInit().then(() => {
         if (myStreamDeck) {
           myStreamDeck.on('up', keyIndex => {
             node.send({ topic: keyIndex, payload: 0 })
